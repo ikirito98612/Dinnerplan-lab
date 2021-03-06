@@ -1,0 +1,52 @@
+<html>
+<head>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/vue@next/dist/vue.global.js"></script>
+<script src="js/views/summaryView.js" type="text/jsx"></script>
+<script src="js/views/sidebarView.js" type="text/jsx"></script>
+<script src="js/views/searchFromView.js" type="text/jsx"></script>
+<script src="js/vuejs/sidebarPresenter.js" type="text/jsx"></script>
+<script src="js/vuejs/summaryPresenter.js" type="text/jsx"></script>
+<script src="js/app.js" type="text/jsx"></script>
+<script src= "js/DinnerModel.js"></script>
+<script src="js/apiConfig.js"></script>
+<script src="js/dishSource.js"></script>
+<link rel="stylesheet" href="style.css">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+  // Babel generates calls to React.createElement by default, so we redefine that:
+  const React={createElement:Vue.h};
+</script>
+</head>
+
+<body>
+<div id="app"></div>
+</body>
+
+<script type="text/jsx">
+/*const persons=4;
+
+const TopLevelModel = {  
+  data(){ return {model: new DinnerModel()}; }, 
+  render(){  return <App model={this.model} />; }
+};
+Vue.render(<TopLevelModel /> ,document.getElementById("app"));*/
+
+const myModel=new DinnerModel();
+Promise.all(
+     [DishSource.getDishDetails(523145), 
+     DishSource.getDishDetails(787321),
+     DishSource.getDishDetails(452179)]
+).then(function(values){ 
+       const myModel=new DinnerModel(3);
+       values.map(d=>myModel.addToMenu(d));   // add the dishes to the model
+       const TopLevelModel = {  
+        data(){ return {model: myModel}; }, 
+        render(){  return <App model={this.model} />; }
+      };
+       Vue.render(<TopLevelModel />,document.getElementById("app"));
+      });
+
+
+</script>
+</html>
